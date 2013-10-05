@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+
+###########################################################
+# Pixel Scaler
+#
+# Allows a user to rescale all the pixel values in a file
+# by running
+#
+#     pixel_scaler <file_name> <scale_value>
+#
+# where the scale_value is in decimal form.
+###########################################################
+
+
+
+def scale_pixels(line, scale)
+  pattern = /-?\d+px/
+  line.gsub(pattern) { |match|
+    (match.chomp("px").to_i * scale).to_i.to_s + "px"
+  }
+end
+
+
+
+path = ARGV[0]
+scale_value = ARGV[1].to_f
+
+lines = IO.readlines(path).map do |line|
+  scale_pixels(line, scale_value)
+end
+
+File.open(path, 'w') do |file|
+  file.puts lines
+end
